@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon src/server"
+    "start": "nodemon src/index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
