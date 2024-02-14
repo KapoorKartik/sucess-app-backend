@@ -1,8 +1,7 @@
 const { parentPort } = require("worker_threads");
-const { MongoClient } = require("mongodb");
 const { connectToDB, closeDBConnection } = require("../configs/db");
 
-const myFxn = async () => {
+const getDataFormDb = async () => {
   console.log("2");
   try {
     const db = await connectToDB();
@@ -17,4 +16,4 @@ const myFxn = async () => {
     await closeDBConnection();
   }
 };
-myFxn();
+getDataFormDb();

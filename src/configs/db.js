@@ -23,10 +23,3 @@ async function closeDBConnection() {
 module.exports = { connectToDB, closeDBConnection };
 
 
-/* *
-  *first listing page where every test shows
-  *second on mock test page of specific test 
-  *third on question page
-  *forth on question submit that save the response of student and send the master result data on front page where result is calculated and saved on backend and updated on data base the this user is give this mock test and on result page i need graph's data and student real marks 
-  *and for the time being i need only read and write api's only
-*/
