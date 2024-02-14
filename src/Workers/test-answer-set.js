@@ -14,7 +14,7 @@ async function performReadOperation() {
       testId: testId,
     };
 
-    const coll = client.db("success-app").collection("test-answer-set");
+    const coll = client.db("sucess-app").collection("test-answer-set");
     const cursor = coll.find(filter);
     const result = await cursor.toArray();
 

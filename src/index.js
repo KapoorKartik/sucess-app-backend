@@ -18,7 +18,7 @@ app.get("/api/exam-list/", async (req, res) => {
 });
 
 app.get("/api/exam-data/:id", async (req, res) => {
-  const worker = new Worker("./Workers/exam-data.js", {
+  const worker = new Worker("./src/Workers/exam-data.js", {
     workerData: { req: req.params.id },
   });
   worker.on("message", (data) => {
@@ -30,7 +30,7 @@ app.get("/api/exam-data/:id", async (req, res) => {
 });
 
 app.get("/api/test-question-set/:testId", (req, res) => {
-  const worker = new Worker("./Workers/test-question-set.js", {
+  const worker = new Worker("./src/Workers/test-question-set.js", {
     workerData: { req: req.params.testId },
   });
   worker.on("message", (data) => {
@@ -42,7 +42,7 @@ app.get("/api/test-question-set/:testId", (req, res) => {
 });
 
 app.get("/api/test-answer-set/:testId", (req, res) => {
-  const worker = new Worker("./Workers/test-answer-set.js", {
+  const worker = new Worker("./src/Workers/test-answer-set.js", {
     workerData: { req: req.params.testId },
   });
   worker.on("message", (data) => {
@@ -54,5 +54,5 @@ app.get("/api/test-answer-set/:testId", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });
