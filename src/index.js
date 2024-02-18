@@ -54,6 +54,43 @@ app.get("/api/test-answer-set/:testId", (req, res) => {
   });
 });
 
+app.get("/api/user/:mobileNumber", (req, res) => {
+  console.log("req.params:", req.params);
+  const worker = new Worker("./src/Workers/user.js", {
+    workerData: { req: req.params.mobileNumber },
+  });
+  worker.on("message", (data) => {
+    res.send(data);
+  });
+  worker.on("error", (msg) => {
+    res.send(msg);
+  });
+});
+
+app.get("/api/user-result/:userId/:mockId?", (req, res) => {
+  const worker = new Worker("./src/Workers/user-result.js", {
+    workerData: { req: req.params },
+  });
+  worker.on("message", (data) => {
+    res.send(data);
+  });
+  worker.on("error", (msg) => {
+    res.send(msg);
+  });
+});
+
+app.get("/api/generate-otp/:userId", (req,res) =>{
+  const worker = new Worker("./src/Workers/generate-otp.js", {
+    workerData: { req: req.params.userId },
+  });
+  worker.on("message", (data) => {
+    res.send(data);
+  });
+  worker.on("error", (msg) => {
+    res.send(msg);
+  });
+})
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
