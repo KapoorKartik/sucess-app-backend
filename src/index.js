@@ -79,9 +79,9 @@ app.get("/api/user-result/:userId/:mockId?", (req, res) => {
   });
 });
 
-app.get("/api/generate-otp/:userId", (req,res) =>{
-  const worker = new Worker("./src/Workers/generate-otp.js", {
-    workerData: { req: req.params.userId },
+app.get("/api/generate-otp/:userId", (req, res) => {
+  const worker = new Worker("./src/Workers/otp.js", {
+    workerData: { userId: req.params.userId, flag: "generateOtp" },
   });
   worker.on("message", (data) => {
     res.send(data);
@@ -89,7 +89,24 @@ app.get("/api/generate-otp/:userId", (req,res) =>{
   worker.on("error", (msg) => {
     res.send(msg);
   });
-})
+});
+
+app.get("/api/verify-otp/:userId/:otp", (req, res) => {
+  const worker = new Worker("./src/Workers/otp.js", {
+    workerData: {
+      userId: req.params.userId,
+      otp: req.params.otp,
+      flag: "verifyOtp",
+    },
+  });
+  worker.on("message", (data) => {
+    res.send(data.res);
+    console.log('data.res:', data.res)
+  });
+  worker.on("error", (msg) => {
+    res.send(msg);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
