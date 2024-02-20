@@ -79,9 +79,9 @@ app.get("/api/user-result/:userId/:mockId?", (req, res) => {
   });
 });
 
-app.get("/api/generate-otp/:userId", (req, res) => {
+app.get("/api/generate-otp/:mobileNumber", (req, res) => {
   const worker = new Worker("./src/Workers/otp.js", {
-    workerData: { userId: req.params.userId, flag: "generateOtp" },
+    workerData: { mobileNumber: req.params.mobileNumber, flag: "generateOtp" },
   });
   worker.on("message", (data) => {
     res.send(data);
@@ -91,10 +91,10 @@ app.get("/api/generate-otp/:userId", (req, res) => {
   });
 });
 
-app.get("/api/verify-otp/:userId/:otp", (req, res) => {
+app.get("/api/verify-otp/:mobileNumber/:otp", (req, res) => {
   const worker = new Worker("./src/Workers/otp.js", {
     workerData: {
-      userId: req.params.userId,
+      mobileNumber: req.params.mobileNumber,
       otp: req.params.otp,
       flag: "verifyOtp",
     },
