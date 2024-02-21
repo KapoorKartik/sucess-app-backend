@@ -84,7 +84,7 @@ app.get("/api/generate-otp/:mobileNumber", (req, res) => {
     workerData: { mobileNumber: req.params.mobileNumber, flag: "generateOtp" },
   });
   worker.on("message", (data) => {
-    res.send(data);
+    res.status(200).json(data);
   });
   worker.on("error", (msg) => {
     res.send(msg);
