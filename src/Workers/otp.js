@@ -1,8 +1,8 @@
 const { workerData, parentPort } = require("worker_threads");
 const { connectToDB, closeDBConnection } = require("../configs/db");
-const mobileNumber = workerData.mobileNumber;
-const flag = workerData.flag;
-const otp = workerData.otp;
+const mobileNumber = workerData?.mobileNumber;
+const flag = workerData?.flag;
+const otp = workerData?.otp;
 const generateOtp = async () => {
   try {
     const db = await connectToDB();

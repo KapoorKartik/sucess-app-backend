@@ -57,10 +57,24 @@ app.get("/api/test-answer-set/:testId", (req, res) => {
 app.get("/api/user/:mobileNumber", (req, res) => {
   console.log("req.params:", req.params);
   const worker = new Worker("./src/Workers/user.js", {
-    workerData: { req: req.params.mobileNumber },
+    workerData: { mobileNumber: req.params.mobileNumber, flag: "fetchUser" },
   });
   worker.on("message", (data) => {
     res.send(data);
+  });
+  worker.on("error", (msg) => {
+    res.send(msg);
+  });
+});
+
+app.post("/api/create-user", (req, res) => {
+  console.log("req.param from create user:", req.body);
+  const worker = new Worker("./src/Workers/user.js", {
+    workerData: { mobileNumber: req.params.mobileNumber, body : req.body, flag : "createUser" },
+  });
+  worker.on("message", (data) => {
+    console.log('data:', data)
+    res.status(201).json({s : "done"});
   });
   worker.on("error", (msg) => {
     res.send(msg);
