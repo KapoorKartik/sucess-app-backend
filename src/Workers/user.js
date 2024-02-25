@@ -1,8 +1,14 @@
 const { workerData, parentPort } = require("worker_threads");
 const { connectToDB, closeDBConnection } = require("../configs/db");
 const mobileNumberFetch = workerData?.mobileNumber;
-const { firstName, lastName, email, pinCode, dob : dobStr, mobileNumber } =
-  workerData?.body;
+const {
+  firstName,
+  lastName,
+  email,
+  pinCode,
+  dob: dobStr,
+  mobileNumber,
+} = workerData?.body;
 const flag = workerData?.flag;
 
 const fetchUserByMobileNumber = async () => {
@@ -37,8 +43,8 @@ const createUser = async () => {
       pinCode,
     });
     console.log("res:", res);
-
-    parentPort.postMessage({ res });
+    const cookie = atob(timeStamp+ "salt" + mobileNumber);
+    parentPort.postMessage({ cookie });
   } catch (error) {
     console.error("Error in worker:", error.message);
     parentPort.postMessage({ error: error.message });

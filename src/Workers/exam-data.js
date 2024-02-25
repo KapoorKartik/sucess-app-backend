@@ -1,31 +1,20 @@
-const { workerData, parentPort } = require("worker_threads");
-const { MongoClient } = require("mongodb");
+
+import { parentPort } from "worker_threads";
+import { connectToDB, closeDBConnection } from "../configs/db";
 const examId = String(workerData.req);
-//
-//
-async function performReadOperation() {
-  const uri = "mongodb://localhost:27017";
-  const client = new MongoClient(uri);
-
+const getDataFormDb = async () => {
+  console.log("2");
   try {
-    await client.connect();
-
-    const filter = {
-      examId: examId,
-    };
-
-    const coll = client.db("sucess-app").collection("exam-data");
-    const cursor = coll.find(filter);
-    const result = await cursor.toArray();
-
-    parentPort.postMessage({ result: result[0] });
+    const db = await connectToDB();
+    const collection = db.collection("exam-data");
+    const res = await collection.findOne({ examId: examId });
+    console.log('res:', res)
+    parentPort.postMessage({ res });
   } catch (error) {
     console.error("Error in worker:", error.message);
     parentPort.postMessage({ error: error.message });
   } finally {
-    await client.close();
+    await closeDBConnection();
   }
-}
-
-// Call the function to perform read operation
-performReadOperation();
+};
+getDataFormDb();

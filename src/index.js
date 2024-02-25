@@ -66,18 +66,27 @@ app.get("/api/user/:mobileNumber", (req, res) => {
     res.send(msg);
   });
 });
+app.get("/", function (req, res) {
+  res.cookie("title", "GeeksforGeeks");
+  res.send("Cookie Set");
+});
 
 app.post("/api/create-user", (req, res) => {
-  console.log("req.param from create user:", req.body);
+  
   const worker = new Worker("./src/Workers/user.js", {
-    workerData: { mobileNumber: req.params.mobileNumber, body : req.body, flag : "createUser" },
+    workerData: {
+      mobileNumber: req.params.mobileNumber,
+      body: req.body,
+      flag: "createUser",
+    },
   });
   worker.on("message", (data) => {
-    console.log('data:', data)
-    res.status(201).json({s : "done"});
+    console.log("data:", data);
+    res.status(201).send(data);
+    
   });
   worker.on("error", (msg) => {
-    res.send(msg);
+    res.status(500).send(msg);
   });
 });
 
@@ -115,7 +124,7 @@ app.get("/api/verify-otp/:mobileNumber/:otp", (req, res) => {
   });
   worker.on("message", (data) => {
     res.send(data.res);
-    console.log('data.res:', data.res)
+    console.log("data.res:", data.res);
   });
   worker.on("error", (msg) => {
     res.send(msg);
