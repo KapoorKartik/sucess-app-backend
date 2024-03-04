@@ -1,15 +1,17 @@
 
-import { parentPort } from "worker_threads";
-import { connectToDB, closeDBConnection } from "../configs/db";
+const { workerData, parentPort } = require("worker_threads");
+const { connectToDB, closeDBConnection } = require("../configs/db");
 const examId = String(workerData.req);
+console.log('examId:', examId)
 const getDataFormDb = async () => {
   console.log("2");
   try {
     const db = await connectToDB();
     const collection = db.collection("exam-data");
-    const res = await collection.findOne({ examId: examId });
-    console.log('res:', res)
-    parentPort.postMessage({ res });
+    const cursor = await collection.find({ examId: examId });
+    const res = await cursor.toArray();
+    console.log('res:', res[0])
+    parentPort.postMessage({ res : res[0].tests  });
   } catch (error) {
     console.error("Error in worker:", error.message);
     parentPort.postMessage({ error: error.message });
