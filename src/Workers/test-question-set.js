@@ -1,6 +1,6 @@
 const { workerData, parentPort } = require("worker_threads");
 const { MongoClient } = require("mongodb");
-const testId = String(workerData.req);
+const mockId = String(workerData.req);
 //
 //
 async function performReadOperation() {
@@ -11,14 +11,14 @@ async function performReadOperation() {
     await client.connect();
 
     const filter = {
-      testId: testId,
+      mockId: mockId,
     };
 
     const coll = client.db("sucess-app").collection("test-question-set");
-    const cursor = coll.find(filter);
-    const result = await cursor.toArray();
+    const res =await coll.findOne(filter);
+    // const result = await cursor.toArray();
 
-    parentPort.postMessage({ result: result[0] });
+    parentPort.postMessage( res );
   } catch (error) {
     console.error("Error in worker:", error.message);
     parentPort.postMessage({ error: error.message });

@@ -30,9 +30,9 @@ app.get("/api/exam-data/:id", async (req, res) => {
   });
 });
 
-app.get("/api/test-question-set/:testId", (req, res) => {
+app.get("/api/test-question-set/:mockId", (req, res) => {
   const worker = new Worker("./src/Workers/test-question-set.js", {
-    workerData: { req: req.params.testId },
+    workerData: { req: req.params.mockId },
   });
   worker.on("message", (data) => {
     res.send(data);
@@ -42,9 +42,9 @@ app.get("/api/test-question-set/:testId", (req, res) => {
   });
 });
 
-app.get("/api/test-answer-set/:testId", (req, res) => {
+app.get("/api/test-answer-set/:mockId", (req, res) => {
   const worker = new Worker("./src/Workers/test-answer-set.js", {
-    workerData: { req: req.params.testId },
+    workerData: { req: req.params.mockId },
   });
   worker.on("message", (data) => {
     res.send(data);
