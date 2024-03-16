@@ -90,9 +90,9 @@ app.post("/api/create-user", (req, res) => {
   });
 });
 
-app.get("/api/user-result/:userId/:mockId?", (req, res) => {
+app.get("/api/user-result/:userId/:mockId", (req, res) => {
   const worker = new Worker("./src/Workers/user-result.js", {
-    workerData: { req: req.params },
+    workerData: { req: req.params ,flag  :"getResult"},
   });
   worker.on("message", (data) => {
     res.send(data);
@@ -100,6 +100,20 @@ app.get("/api/user-result/:userId/:mockId?", (req, res) => {
   worker.on("error", (msg) => {
     res.send(msg);
   });
+});
+
+app.post("/api/saved-result", (req, res) => {
+  console.log('req from submit btn:', req.body)
+  res.status(201).json({created : "dine"})
+  // const worker = new Worker("./src/Workers/user-result.js", {
+  //   workerData: { req: req.params, flag: "savedResult" },
+  // });
+  // worker.on("message", (data) => {
+  //   res.send(data);
+  // });
+  // worker.on("error", (msg) => {
+  //   res.send(msg);
+  // });
 });
 
 app.get("/api/generate-otp/:mobileNumber", (req, res) => {
